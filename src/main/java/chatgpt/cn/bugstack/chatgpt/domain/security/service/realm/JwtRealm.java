@@ -28,11 +28,13 @@ public class JwtRealm extends AuthorizingRealm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+        // 从AuthenticationToken中获取jwt字符串。
         String jwt = (String) token.getPrincipal();
+        // 检查jwt是否为空，如果为空则抛出空指针异常。
         if (jwt == null) {
             throw new NullPointerException("jwtToken 不允许为空");
         }
-        // 判断
+        // 使用jwtUtil验证jwt的有效性，如果无效则抛出UnknownAccountException。
         if (!jwtUtil.isVerify(jwt)) {
             throw new UnknownAccountException();
         }
